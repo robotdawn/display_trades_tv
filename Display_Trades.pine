@@ -1,0 +1,25 @@
+//@version5
+indicator("Display Trades", overlay=true)
+t_open = input.time(timestamp("9 Sept 2023 10:00 -0400"), "Date and Time")
+t_close = input.time(timestamp("9 Sept 2023 10:00 -0400"), "Date and Time")
+lot_size = input.int(defval = 1, title = "Lot Size", minval = 1, step = 1 , tooltip = "Enter Lot Size Traded") 
+bot_val = input.float(defval = 0.00, title = "Price Bought", minval = 0, tooltip = "Enter Price Value") 
+sold_val = input.float(defval = 0.00, title = "Price Sold", minval = 0, tooltip = "Enter Price Value")
+
+tim = time == t_open
+tim2 = time == t_close
+
+// need label when hover
+
+// need 2 plotshape (open, close)
+//add some y distance between?
+plotshape(tim ? bot_val : na, style=shape.triangleup, color = color.green, location=location.abovebar, size=size.normal)
+plotshape(tim2 ? sold_val : na, style=shape.triangledown, color = color.red, location=location.abovebar, size=size.normal)
+
+string  tableYposInput = input.string("bottom", "Panel position", inline = "11", options = ["top", "middle", "bottom"])
+string  tableXposInput = input.string("right", "", inline = "11", options = ["left", "center", "right"])
+string str1 = str.tostring(lot_size) + " lots bought at $" + str.tostring(bot_val)
+
+
+var table_bot = table.new(position = tableYposInput + "_" + tableXposInput, columns = 1, rows = 1, bgcolor = color.white)
+table.cell(table_id = table_bot, column = 0, row = 0, text_color=color.white, text = str1)

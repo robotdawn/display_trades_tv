@@ -1,25 +1,18 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © jryan3
+
 //@version5
 indicator("Label_Trades", overlay=true)
-t_open = input.time(timestamp("1 Jan 2024 10:00"), "Date and Time")
-t_close = input.time(timestamp("1 Jan 2024 10:00"), "Date and Time")
+t_bot = input.time(timestamp("1 Jan 2024 10:00"), "Date and Time")
+t_sold = input.time(timestamp("1 Jan 2024 10:00"), "Date and Time")
 lot_size = input.int(defval = 1, title = "Lot Size", minval = 1, step = 1 , tooltip = "Enter Lot Size Traded") 
 bot_val = input.float(defval = 0.00, title = "Price Bought", minval = 0, tooltip = "Enter Price Value") 
 sold_val = input.float(defval = 0.00, title = "Price Sold", minval = 0, tooltip = "Enter Price Value")
 
-tim = time == t_open
-tim2 = time == t_close
-
-// need label when hover
-
-// need 2 plotshape (open, close)
-//add some y distance between?
-plotshape(tim ? bot_val : na, style=shape.triangleup, color = color.green, location=location.abovebar, size=size.normal)
-plotshape(tim2 ? sold_val : na, style=shape.triangledown, color = color.red, location=location.abovebar, size=size.normal)
-
-string  tableYposInput = input.string("bottom", "Panel position", inline = "11", options = ["top", "middle", "bottom"])
-string  tableXposInput = input.string("right", "", inline = "11", options = ["left", "center", "right"])
-string str1 = str.tostring(lot_size) + " lots bought at $" + str.tostring(bot_val)
+//tim = time == t_bot
+//tim2 = time == t_sold
+// TODO: Use for time series 
 
 
-var table_bot = table.new(position = tableYposInput + "_" + tableXposInput, columns = 1, rows = 1, bgcolor = color.white)
-table.cell(table_id = table_bot, column = 0, row = 0, text_color=color.white, text = str1)
+bot_lbl = label.new(x=t_bot, y=na, xloc=xloc.bar_time, yloc=yloc.abovebar, style=label.style_triangleup, color=color.green, size=size.small, tooltip=str.tostring(lot_size) + " lots bought at $" + str.tostring(bot_val))
+sold_lbl = label.new(x=t_sold, y=na, xloc=xloc.bar_time, yloc=yloc.abovebar, style=label.style_triangledown, color=color.red, size=size.small, tooltip=str.tostring(lot_size) + " lots sold at $" + str.tostring(sold_val))

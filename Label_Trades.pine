@@ -6,13 +6,20 @@ indicator("Label_Trades", overlay=true)
 t_bot = input.time(timestamp("1 Jan 2024 10:00"), "Date and Time")
 t_sold = input.time(timestamp("1 Jan 2024 10:00"), "Date and Time")
 lot_size = input.int(defval = 1, title = "Lot Size", minval = 1, step = 1 , tooltip = "Enter Lot Size Traded") 
+long_short = input.string(defval = "long", title = "Long/Short", options = ["long", "short"])
 bot_val = input.float(defval = 0.00, title = "Price Bought", minval = 0, tooltip = "Enter Price Value") 
 sold_val = input.float(defval = 0.00, title = "Price Sold", minval = 0, tooltip = "Enter Price Value")
 
-//tim = time == t_bot
-//tim2 = time == t_sold
-// TODO: Use for time series 
+plotchar(t_bot, "t_bot", "", location = location.top)
+plotchar(t_sold, "t_sold", "", location = location.top)
 
 
-bot_lbl = label.new(x=t_bot, y=na, xloc=xloc.bar_time, yloc=yloc.abovebar, style=label.style_triangleup, color=color.green, size=size.small, tooltip=str.tostring(lot_size) + " lots bought at $" + str.tostring(bot_val))
-sold_lbl = label.new(x=t_sold, y=na, xloc=xloc.bar_time, yloc=yloc.abovebar, style=label.style_triangledown, color=color.red, size=size.small, tooltip=str.tostring(lot_size) + " lots sold at $" + str.tostring(sold_val))
+if long_short == "long"
+    label.new(x=t_sold, y=na, xloc=xloc.bar_time, yloc=yloc.abovebar, style=label.style_triangledown, color=color.red, size=size.small, tooltip=str.tostring(lot_size) + " lots sold at $" + str.tostring(sold_val))
+    label.new(x=t_bot, y=na, xloc=xloc.bar_time, yloc=yloc.belowbar, style=label.style_triangleup, color=color.green, size=size.small, tooltip=str.tostring(lot_size) + " lots bought at $" + str.tostring(bot_val))
+
+if long_short == "short"
+    label.new(x=t_bot, y=na, xloc=xloc.bar_time, yloc=yloc.abovebar, style=label.style_triangledown, color=color.green, size=size.small, tooltip=str.tostring(lot_size) + " lots bought at $" + str.tostring(bot_val))
+    label.new(x=t_sold, y=na, xloc=xloc.bar_time, yloc=yloc.belowbar, style=label.style_triangleup, color=color.red, size=size.small, tooltip=str.tostring(lot_size) + " lots sold at $" + str.tostring(sold_val))
+    
+

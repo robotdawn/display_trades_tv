@@ -1,2 +1,2 @@
 # display_trades_tv
-Displat trades on Tradingview Chart
+Display trades on Tradingview Chart
